@@ -1,0 +1,120 @@
+{
+  "requirements": {
+    "node_identities": {
+      "node-a": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "node-b": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "node-c": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "node-d": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    "node_fabric_ipv4": {
+      "node-a": "192.0.2.10",
+      "node-b": "192.0.2.11",
+      "node-c": "192.0.2.12",
+      "node-d": "192.0.2.13"
+    },
+    "source_node_id": "node-a",
+    "fabric_ipv4_cidr": "192.0.2.0/24",
+    "require_rdma": true,
+    "api_port": 8002,
+    "distributed_port": 29600,
+    "minimum_storage_bytes": 236441840052
+  },
+  "nodes": [
+    {
+      "id": "node-a",
+      "machine_id_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "architecture": "aarch64",
+      "gpu_name": "NVIDIA GB10",
+      "nvidia_visible": true,
+      "storage_available_bytes": 300000000000,
+      "docker_available": true,
+      "cdi_available": true,
+      "api_port_available": true,
+      "distributed_port_available": true,
+      "egress_available": true,
+      "fabric": {
+        "interface": "fabric0",
+        "ipv4": "192.0.2.10",
+        "rdma_device": "roce0",
+        "rdma_state": "ACTIVE"
+      },
+      "reachable_node_ids": [
+        "node-b",
+        "node-c",
+        "node-d"
+      ]
+    },
+    {
+      "id": "node-b",
+      "machine_id_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "architecture": "aarch64",
+      "gpu_name": "NVIDIA DGX Spark GB10",
+      "nvidia_visible": true,
+      "storage_available_bytes": 300000000000,
+      "docker_available": true,
+      "cdi_available": true,
+      "api_port_available": true,
+      "distributed_port_available": true,
+      "egress_available": false,
+      "fabric": {
+        "interface": "fabric0",
+        "ipv4": "192.0.2.11",
+        "rdma_device": "roce0",
+        "rdma_state": "ACTIVE"
+      },
+      "reachable_node_ids": [
+        "node-a",
+        "node-c",
+        "node-d"
+      ]
+    },
+    {
+      "id": "node-c",
+      "machine_id_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "architecture": "aarch64",
+      "gpu_name": "NVIDIA GB10",
+      "nvidia_visible": true,
+      "storage_available_bytes": 300000000000,
+      "docker_available": true,
+      "cdi_available": true,
+      "api_port_available": true,
+      "distributed_port_available": true,
+      "egress_available": false,
+      "fabric": {
+        "interface": "fabric0",
+        "ipv4": "192.0.2.12",
+        "rdma_device": "roce0",
+        "rdma_state": "ACTIVE"
+      },
+      "reachable_node_ids": [
+        "node-a",
+        "node-b",
+        "node-d"
+      ]
+    },
+    {
+      "id": "node-d",
+      "machine_id_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "architecture": "aarch64",
+      "gpu_name": "NVIDIA DGX Spark GB10",
+      "nvidia_visible": true,
+      "storage_available_bytes": 300000000000,
+      "docker_available": true,
+      "cdi_available": true,
+      "api_port_available": true,
+      "distributed_port_available": true,
+      "egress_available": false,
+      "fabric": {
+        "interface": "fabric0",
+        "ipv4": "192.0.2.13",
+        "rdma_device": "roce0",
+        "rdma_state": "ACTIVE"
+      },
+      "reachable_node_ids": [
+        "node-a",
+        "node-b",
+        "node-c"
+      ]
+    }
+  ]
+}

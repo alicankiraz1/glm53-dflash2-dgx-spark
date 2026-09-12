@@ -1,0 +1,22 @@
+{
+  "id": "chatcmpl-fixture-needle-calibration",
+  "object": "chat.completion",
+  "created": 1756000008,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "ack",
+        "reasoning_content": "Calibration only needs the reported prompt token count."
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 88000,
+    "completion_tokens": 1,
+    "total_tokens": 88001
+  }
+}

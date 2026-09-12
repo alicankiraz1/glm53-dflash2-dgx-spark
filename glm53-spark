@@ -1,0 +1,317 @@
+#!/usr/bin/env bash
+set -eu
+unset APPLY
+_GLM53_APPLY=0
+
+_GLM53_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly _GLM53_ROOT_DIR
+. "${_GLM53_ROOT_DIR}/lib/common.sh"
+. "${_GLM53_ROOT_DIR}/lib/config.sh"
+. "${_GLM53_ROOT_DIR}/lib/doctor.sh"
+. "${_GLM53_ROOT_DIR}/lib/prepare.sh"
+. "${_GLM53_ROOT_DIR}/lib/lifecycle.sh"
+. "${_GLM53_ROOT_DIR}/lib/validate.sh"
+
+_GLM53_CONFIG_PATH="${_GLM53_ROOT_DIR}/config/cluster.json"
+_GLM53_LOCK_PATH="${_GLM53_ROOT_DIR}/config/reproduction.lock.json"
+_GLM53_STATE_ROOT="${_GLM53_ROOT_DIR}/.state"
+_GLM53_PLAN_DIGEST=
+
+usage() {
+  printf '%s\n' \
+    "Usage: glm53-spark [--config PATH] [--lock PATH] [--state-root PATH] [--apply] COMMAND [ARGUMENT...]"
+}
+
+test_write_mutation_sentinel() {
+  local sentinel_path="${_GLM53_STATE_ROOT}/test-apply-sentinel"
+  mkdir -p "${_GLM53_STATE_ROOT}"
+  (
+    set -C
+    umask 077
+    printf 'applied\n' >"${sentinel_path}"
+  )
+}
+
+require_option_value() {
+  local option_name=$1
+  local remaining_count=$2
+  [ "${remaining_count}" -ge 2 ] || {
+    common_die "${option_name} requires a value" 2
+    exit 2
+  }
+}
+
+command_name=
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --config)
+      require_option_value "$1" "$#"
+      _GLM53_CONFIG_PATH=$2
+      shift 2
+      ;;
+    --lock)
+      require_option_value "$1" "$#"
+      _GLM53_LOCK_PATH=$2
+      shift 2
+      ;;
+    --state-root)
+      require_option_value "$1" "$#"
+      _GLM53_STATE_ROOT=$2
+      shift 2
+      ;;
+    --apply)
+      _GLM53_APPLY=1
+      shift
+      ;;
+    --help|-h)
+      usage
+      exit 0
+      ;;
+    --)
+      shift
+      [ "$#" -gt 0 ] || {
+        common_die "a command is required" 2
+        exit 2
+      }
+      command_name=$1
+      shift
+      break
+      ;;
+    -*)
+      common_die "unsupported global option: $1" 2
+      exit 2
+      ;;
+    *)
+      command_name=$1
+      shift
+      break
+      ;;
+  esac
+done
+
+[ -n "${command_name}" ] || {
+  usage >&2
+  exit 2
+}
+
+config_validate
+
+case "${command_name}" in
+  __test-plan-or-apply)
+    [ "${GLM53_TESTING:-0}" = "1" ] || {
+      common_die "unsupported command: ${command_name}" 2
+      exit 2
+    }
+    [ "$#" -eq 1 ] || {
+      common_die "__test-plan-or-apply accepts only a preflight gate" 2
+      exit 2
+    }
+    case "$1" in
+      pass) preflight_passed=1 ;;
+      fail) preflight_passed=0 ;;
+      *)
+        common_die "test preflight gate must be pass or fail" 2
+        exit 2
+        ;;
+    esac
+    shift
+    common_plan_or_apply \
+      "${_GLM53_APPLY}" \
+      "${preflight_passed}" \
+      test_write_mutation_sentinel
+    ;;
+  __test-config-export)
+    [ "${GLM53_TESTING:-0}" = "1" ] || {
+      common_die "unsupported command: ${command_name}" 2
+      exit 2
+    }
+    [ "$#" -eq 1 ] || {
+      common_die "__test-config-export requires one field" 2
+      exit 2
+    }
+    config_export "$1"
+    ;;
+  doctor)
+    [ "${_GLM53_APPLY}" -eq 0 ] || {
+      common_die "doctor is strictly read-only and rejects --apply" 2
+      exit 2
+    }
+    doctor_output_format=text
+    if [ "$#" -eq 1 ] && [ "$1" = "--json" ]; then
+      doctor_output_format=json
+      shift
+    fi
+    [ "$#" -eq 0 ] || {
+      common_die "doctor accepts only --json and no mutation options" 2
+      exit 2
+    }
+    DOCTOR_CONFIG_VALIDATED=1 \
+      DOCTOR_OUTPUT_FORMAT="${doctor_output_format}" \
+      doctor_run "${_GLM53_CONFIG_PATH}" "${_GLM53_LOCK_PATH}"
+    ;;
+  prepare)
+    prepare_run_id=
+    prepare_plan_digest=
+    prepare_license=
+    while [ "$#" -gt 0 ]; do
+      case "$1" in
+        --run-id)
+          require_option_value "$1" "$#"
+          prepare_run_id=$2
+          shift 2
+          ;;
+        --plan-digest)
+          require_option_value "$1" "$#"
+          prepare_plan_digest=$2
+          shift 2
+          ;;
+        --acknowledge-draft-license)
+          require_option_value "$1" "$#"
+          prepare_license=$2
+          shift 2
+          ;;
+        *)
+          common_die "unsupported prepare option: $1" 2
+          exit 2
+          ;;
+      esac
+    done
+    [ -n "${prepare_run_id}" ] || {
+      common_die "prepare requires --run-id" 2
+      exit 2
+    }
+    if [ "${_GLM53_APPLY}" -eq 0 ]; then
+      [ -z "${prepare_plan_digest}" ] && [ -z "${prepare_license}" ] || {
+        common_die "plan-only prepare rejects apply authorization options" 2
+        exit 2
+      }
+      prepare_plan \
+        "${_GLM53_CONFIG_PATH}" \
+        "${_GLM53_LOCK_PATH}" \
+        "${prepare_run_id}"
+    else
+      [ -n "${prepare_plan_digest}" ] || {
+        common_die "prepare --apply requires --plan-digest" 2
+        exit 2
+      }
+      prepare_apply \
+        "${_GLM53_CONFIG_PATH}" \
+        "${_GLM53_LOCK_PATH}" \
+        "${prepare_run_id}" \
+        "${prepare_plan_digest}" \
+        "${prepare_license}"
+    fi
+    ;;
+  launch|stop|rollback)
+    lifecycle_run_id=
+    while [ "$#" -gt 0 ]; do
+      case "$1" in
+        --run-id)
+          require_option_value "$1" "$#"
+          lifecycle_run_id=$2
+          shift 2
+          ;;
+        --plan-digest)
+          require_option_value "$1" "$#"
+          _GLM53_PLAN_DIGEST=$2
+          shift 2
+          ;;
+        *)
+          common_die "unsupported ${command_name} option: $1" 2
+          exit 2
+          ;;
+      esac
+    done
+    [ -n "${lifecycle_run_id}" ] || {
+      common_die "${command_name} requires --run-id" 2
+      exit 2
+    }
+    if [ "${_GLM53_APPLY}" -eq 0 ]; then
+      [ -z "${_GLM53_PLAN_DIGEST}" ] || {
+        common_die "plan-only ${command_name} rejects apply authorization options" 2
+        exit 2
+      }
+      lifecycle_plan "${command_name}" "${lifecycle_run_id}"
+    else
+      [ -n "${_GLM53_PLAN_DIGEST}" ] || {
+        common_die "${command_name} --apply requires --plan-digest" 2
+        exit 2
+      }
+      "lifecycle_${command_name}" "${lifecycle_run_id}"
+    fi
+    ;;
+  status|logs)
+    [ "${_GLM53_APPLY}" -eq 0 ] || {
+      common_die "${command_name} is strictly read-only and rejects --apply" 2
+      exit 2
+    }
+    lifecycle_run_id=
+    lifecycle_rank=
+    while [ "$#" -gt 0 ]; do
+      case "$1" in
+        --run-id)
+          require_option_value "$1" "$#"
+          lifecycle_run_id=$2
+          shift 2
+          ;;
+        --rank)
+          require_option_value "$1" "$#"
+          lifecycle_rank=$2
+          shift 2
+          ;;
+        *)
+          common_die "unsupported ${command_name} option: $1" 2
+          exit 2
+          ;;
+      esac
+    done
+    [ -n "${lifecycle_run_id}" ] || {
+      common_die "${command_name} requires --run-id" 2
+      exit 2
+    }
+    if [ "${command_name}" = "status" ]; then
+      [ -z "${lifecycle_rank}" ] || {
+        common_die "status reports every rank and rejects --rank" 2
+        exit 2
+      }
+      lifecycle_status "${lifecycle_run_id}"
+    else
+      [ -n "${lifecycle_rank}" ] || {
+        common_die "logs requires --rank" 2
+        exit 2
+      }
+      lifecycle_logs "${lifecycle_run_id}" "${lifecycle_rank}"
+    fi
+    ;;
+  validate)
+    validate_run_id=
+    validate_suite=all
+    while [ "$#" -gt 0 ]; do
+      case "$1" in
+        --run-id)
+          require_option_value "$1" "$#"
+          validate_run_id=$2
+          shift 2
+          ;;
+        --suite)
+          require_option_value "$1" "$#"
+          validate_suite=$2
+          shift 2
+          ;;
+        *)
+          common_die "unsupported validate option: $1" 2
+          exit 2
+          ;;
+      esac
+    done
+    [ -n "${validate_run_id}" ] || {
+      common_die "validate requires --run-id" 2
+      exit 2
+    }
+    validate_run "${validate_run_id}" "${validate_suite}"
+    ;;
+  *)
+    common_die "unsupported command: ${command_name}" 2
+    exit 2
+    ;;
+esac

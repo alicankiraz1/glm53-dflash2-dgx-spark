@@ -1,0 +1,10 @@
+FROM lmsysorg/sglang@sha256:e88340d6cd59e7356147d00de4a318f5951698c9c9dae70ba36fe12d2f034714
+
+COPY python/sglang /sgl-workspace/sglang/python/sglang
+
+LABEL org.opencontainers.image.source="https://github.com/sgl-project/sglang"
+LABEL io.glm53.owner="glm53-spark"
+LABEL io.glm53.base.manifest="sha256:e88340d6cd59e7356147d00de4a318f5951698c9c9dae70ba36fe12d2f034714"
+LABEL io.glm53.base.arm64="sha256:73f9294b78e38d8cc297bfed16daec8ac192b126a2d1fb9055e259a632c68f00"
+LABEL io.glm53.sglang.commit="92831e5ec1e109b1be6d7071281557cd6481f4f5"
+LABEL io.glm53.patch.sha256="9399746b546825af723d4fcad88373e77891a49c0b2c356d37841b381b5b85e3"

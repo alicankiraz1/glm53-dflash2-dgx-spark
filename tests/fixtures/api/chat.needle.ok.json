@@ -1,0 +1,22 @@
+{
+  "id": "chatcmpl-fixture-needle",
+  "object": "chat.completion",
+  "created": 1756000009,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{label}",
+        "reasoning_content": "Scanning the catalog lines located the requested label: {label}."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 120121,
+    "completion_tokens": 94,
+    "total_tokens": 120215
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "glm-5.3-flash-nvfp4",
+      "object": "model",
+      "created": 1756000000,
+      "owned_by": "sglang",
+      "root": "glm-5.3-flash-nvfp4"
+    }
+  ]
+}

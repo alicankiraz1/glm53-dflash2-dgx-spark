@@ -1,0 +1,9 @@
+{
+  "files": {
+    ".gitattributes": "e404a01e1f3116ff0744366d088c8fc2ba4ab735",
+    "README.md": "7b22c057e4056b541d94611248de7dce8e4753a3",
+    "config.json": "083085aaf95d59bad59c58f1160865683460254e",
+    "model.safetensors": "8931dc522be0aa31760a7463f8d2f8044fa3e6d40be2e87aa08e9fd17bfd6683"
+  },
+  "revision": "7d74cdd881ed7e32c31175984a67823127b66cfe"
+}

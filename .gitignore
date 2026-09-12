@@ -1,0 +1,40 @@
+# Runtime state and machine-local configuration
+.state/
+.runtime/
+config/cluster.json
+
+# Model and container image archives
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.sqsh
+*.sif
+*.safetensors
+*.gguf
+*.bin
+*.pt
+*.pth
+
+# Logs and generated validation output
+*.log
+logs/
+results/validation/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local environments, credentials, and tokens
+.env
+.env.*
+*.key
+*.pem
+*.token
+*credentials*
+*secret*
+
+# Curated, reviewed reference results remain trackable
+!results/
+!results/reference/
+!results/reference/**

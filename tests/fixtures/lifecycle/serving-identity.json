@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "expected_served_model_name": "glm-5.3-flash-nvfp4",
+  "expected_model_path": "/srv/hf-cache/models--LibertAIDAI--GLM-5.3-Flash-NVFP4/snapshots/aa28e1f54130286c95fee10d0705c74ce8743734",
+  "wrong_served_model_name": "some-other-served-model",
+  "wrong_model_path": "/srv/hf-cache/models--other--Model/snapshots/0000000000000000000000000000000000000000",
+  "unrelated_listener_body": "{\"status\":\"ok\"}",
+  "drifted_current_config": {
+    "api_port": 8102,
+    "source_fabric_ipv4": "192.0.2.20"
+  }
+}

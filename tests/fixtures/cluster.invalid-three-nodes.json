@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "ssh": {
+    "known_hosts_file": "~/.ssh/glm53_known_hosts",
+    "fabric_known_hosts_file": "/srv/glm53-operator/fabric_known_hosts",
+    "connect_timeout_seconds": 7,
+    "command_timeout_seconds": 30
+  },
+  "fabric": {
+    "ipv4_cidr": "192.0.2.0/24",
+    "require_rdma": true
+  },
+  "nodes": [
+    {
+      "id": "node-a",
+      "rank": 0,
+      "ssh_alias": "glm53-node-a",
+      "role": "source",
+      "remote_root": "/srv/glm53-package",
+      "fabric_ipv4": "192.0.2.10",
+      "hf_cache_root": "/srv/hf-cache",
+      "expected_machine_id_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "id": "node-b",
+      "rank": 1,
+      "ssh_alias": "glm53-node-b",
+      "role": "worker",
+      "remote_root": "/srv/glm53-package",
+      "fabric_ipv4": "192.0.2.11",
+      "hf_cache_root": "/srv/hf-cache",
+      "expected_machine_id_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "id": "node-c",
+      "rank": 2,
+      "ssh_alias": "glm53-node-c",
+      "role": "worker",
+      "remote_root": "/srv/glm53-package",
+      "fabric_ipv4": "192.0.2.12",
+      "hf_cache_root": "/srv/hf-cache",
+      "expected_machine_id_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  ],
+  "ports": {
+    "api": 8002,
+    "distributed": 29600
+  }
+}

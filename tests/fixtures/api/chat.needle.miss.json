@@ -1,0 +1,22 @@
+{
+  "id": "chatcmpl-fixture-needle-miss",
+  "object": "chat.completion",
+  "created": 1756000010,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "No catalog label appears anywhere in the supplied records.",
+        "reasoning_content": "The inserted line was not attended to, which is a retrieval miss."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 120121,
+    "completion_tokens": 88,
+    "total_tokens": 120209
+  }
+}

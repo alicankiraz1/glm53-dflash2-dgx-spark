@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "failing_rank": 2,
+  "failing_phase": "release",
+  "failing_exit_code": 23,
+  "absent_container_ranks": [
+    2
+  ],
+  "expected_stopped_container_ranks": [
+    0,
+    1,
+    3
+  ],
+  "expected_restored_service_names": [
+    "glm53-spark-prior-rank0",
+    "glm53-spark-prior-rank1",
+    "glm53-spark-prior-rank2"
+  ]
+}

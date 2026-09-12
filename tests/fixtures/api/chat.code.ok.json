@@ -1,0 +1,22 @@
+{
+  "id": "chatcmpl-fixture-code",
+  "object": "chat.completion",
+  "created": 1756000004,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "def parity_label(value):\n    return \"even\" if value % 2 == 0 else \"odd\"\n",
+        "reasoning_content": "A single modulo test is enough for the requested helper."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 52,
+    "completion_tokens": 96,
+    "total_tokens": 148
+  }
+}

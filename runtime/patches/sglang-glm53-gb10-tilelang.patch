@@ -1,0 +1,73 @@
+diff --git a/python/sglang/kernels/ops/attention/dsa/tilelang_kernel.py b/python/sglang/kernels/ops/attention/dsa/tilelang_kernel.py
+index 2c1eff2e2e..091ec2a083 100644
+--- a/python/sglang/kernels/ops/attention/dsa/tilelang_kernel.py
++++ b/python/sglang/kernels/ops/attention/dsa/tilelang_kernel.py
+@@ -47,6 +47,48 @@ _is_hip = is_hip()
+ _is_gfx95_supported = is_gfx95_supported()
+ _is_fp8_fnuz = is_fp8_fnuz()
+ 
++# Dynamic shared memory that sparse_attention_fwd_kernel_v1 requests at its
++# default tile (block_I=64, num_stages=2, threads=256). Taken from the launch
++# failure reported by CUDA when the trace is compiled, not from a model of the
++# TileLang allocator, so it is only meaningful as a threshold: devices at or
++# above it are known to launch the default tile, devices below it are known to
++# fail. Consumer and unified-memory Blackwell parts (e.g. GB10, sm_121) expose
++# roughly 101 KB and land in the failing group; datacenter parts expose ~227 KB.
++_V1_DEFAULT_SMEM_BYTES = 169984
++
++# Smallest tile observed to compile and run correctly when the default does not
++# fit. The three values are coupled: threads must drop to 128 before block_I can
++# drop to 32, otherwise the m_i/alpha fragment layouts cannot be satisfied, and
++# block_I=16 trips an MMA shape assertion.
++_V1_SMALL_SMEM_TILE = {"block_I": 32, "num_stages": 1, "threads": 128}
++
++
++@lru_cache(maxsize=None)
++def _cuda_max_dynamic_smem_bytes(device_index: int) -> int:
++    """Opt-in dynamic shared memory per block, in bytes, or 0 if unknown."""
++    props = torch.cuda.get_device_properties(device_index)
++    for attr in ("shared_memory_per_block_optin", "shared_memory_per_block"):
++        value = getattr(props, attr, 0)
++        if value:
++            return int(value)
++    return 0
++
++
++def _v1_tile_overrides(device: torch.device) -> dict:
++    """Tile overrides for sparse_attention_fwd_kernel_v1 on shared-memory-poor GPUs.
++
++    Returns an empty mapping on every device that can launch the default tile so
++    that tuned configurations stay untouched.
++    """
++    if _is_hip or device.type != "cuda":
++        return {}
++    limit = _cuda_max_dynamic_smem_bytes(
++        device.index if device.index is not None else torch.cuda.current_device()
++    )
++    if limit and limit < _V1_DEFAULT_SMEM_BYTES:
++        return dict(_V1_SMALL_SMEM_TILE)
++    return {}
++
+ BF16 = "bfloat16"
+ FP8 = "float8_e4m3fnuz" if _is_fp8_fnuz else "float8_e4m3fn"
+ FP8_DTYPE = torch.float8_e4m3fnuz if _is_fp8_fnuz else torch.float8_e4m3fn
+@@ -1406,8 +1448,18 @@ def tilelang_sparse_fwd(
+             if tail_dim == 0
+             else sparse_attention_fwd_kernel_v2
+         )
++        # Only the tail_dim == 0 kernel is retuned here. The tail_dim > 0 kernel
++        # fixes threads=384 internally, so lowering block_I alone is not known to
++        # keep it within a small shared-memory budget.
++        tile_overrides = _v1_tile_overrides(q.device) if tail_dim == 0 else {}
+         kernel = kernel_factory(
+-            num_heads, d_v, tail_dim, topk, sm_scale=sm_scale, return_lse=return_lse
++            num_heads,
++            d_v,
++            tail_dim,
++            topk,
++            sm_scale=sm_scale,
++            return_lse=return_lse,
++            **tile_overrides,
+         )
+         # Caller-allocated LSE (in-place kernel arg): written only by kernels
+         # traced with return_lse=True, but the prim_func signature always has it.

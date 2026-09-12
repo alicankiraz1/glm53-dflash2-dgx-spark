@@ -1,0 +1,14 @@
+GLM-5.3-Flash NVFP4 + DFlash2 for NVIDIA DGX Spark
+Copyright 2026 GLM53 DFlash2 DGX Spark contributors
+
+This product includes software developed by the project contributors and
+distributed under the Apache License, Version 2.0.
+
+This repository includes a patch derived from SGLang:
+Copyright 2023-2024 SGLang Team
+SGLang is distributed under the Apache License 2.0.
+
+The reproducible build uses an SGLang base container image as an upstream build
+input, but no prebuilt container image is distributed by this repository.
+Model weights are also not distributed. Separate terms and the limits of this
+notice are summarized in THIRD_PARTY_NOTICES.md.

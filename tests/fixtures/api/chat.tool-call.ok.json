@@ -1,0 +1,32 @@
+{
+  "id": "chatcmpl-fixture-tool-call",
+  "object": "chat.completion",
+  "created": 1756000006,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "reasoning_content": "The shipment identifier is present, so the lookup tool applies.",
+        "tool_calls": [
+          {
+            "id": "call-fixture-0",
+            "type": "function",
+            "function": {
+              "name": "get_shipment_status",
+              "arguments": "{\"shipment_id\": \"ZX-4471\"}"
+            }
+          }
+        ]
+      },
+      "finish_reason": "tool_calls"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 148,
+    "completion_tokens": 61,
+    "total_tokens": 209
+  }
+}

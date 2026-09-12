@@ -1,0 +1,81 @@
+{
+  "concurrency": 4,
+  "model": "glm-5.3-flash-nvfp4",
+  "expected_completion_tokens": 1024,
+  "waves": [
+    {
+      "wave": 0,
+      "requests": [
+        {
+          "name": "c4-w0-r0",
+          "started_seconds": 200.0,
+          "ttft_seconds": 0.4,
+          "completed_seconds": 262.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        },
+        {
+          "name": "c4-w0-r1",
+          "started_seconds": 200.0,
+          "ttft_seconds": 0.45,
+          "completed_seconds": 263.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        },
+        {
+          "name": "c4-w0-r2",
+          "started_seconds": 200.0,
+          "ttft_seconds": 0.5,
+          "completed_seconds": 264.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        },
+        {
+          "name": "c4-w0-r3",
+          "started_seconds": 200.0,
+          "ttft_seconds": 0.55,
+          "completed_seconds": 261.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        }
+      ]
+    },
+    {
+      "wave": 1,
+      "requests": [
+        {
+          "name": "c4-w1-r0",
+          "started_seconds": 300.0,
+          "ttft_seconds": 0.6,
+          "completed_seconds": 362.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        },
+        {
+          "name": "c4-w1-r1",
+          "started_seconds": 300.0,
+          "ttft_seconds": 0.65,
+          "completed_seconds": 363.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        },
+        {
+          "name": "c4-w1-r2",
+          "started_seconds": 300.0,
+          "ttft_seconds": 0.7,
+          "completed_seconds": 364.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        },
+        {
+          "name": "c4-w1-r3",
+          "started_seconds": 300.0,
+          "ttft_seconds": 0.75,
+          "completed_seconds": 361.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        }
+      ]
+    }
+  ]
+}

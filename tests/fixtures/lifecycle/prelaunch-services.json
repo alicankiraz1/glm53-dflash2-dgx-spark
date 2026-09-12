@@ -1,0 +1,86 @@
+{
+  "version": 2,
+  "machine_id_prefix": "synthetic-machine-id",
+  "nodes": [
+    {
+      "node_id": "node-a",
+      "ssh_alias": "glm53-node-a",
+      "services": [
+        {
+          "id": "a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+          "name": "glm53-spark-prior-rank0",
+          "image": "glm53-dflash2-dgx-spark:prior",
+          "state": "running"
+        }
+      ]
+    },
+    {
+      "node_id": "node-b",
+      "ssh_alias": "glm53-node-b",
+      "services": [
+        {
+          "id": "b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1",
+          "name": "glm53-spark-prior-rank1",
+          "image": "glm53-dflash2-dgx-spark:prior",
+          "state": "running"
+        },
+        {
+          "id": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+          "name": "glm53-spark-prior-rank1-sidecar",
+          "image": "glm53-dflash2-dgx-spark:prior",
+          "state": "running"
+        },
+        {
+          "id": "b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3",
+          "name": "glm53-spark-prior-rank1-tail",
+          "image": "glm53-dflash2-dgx-spark:prior",
+          "state": "running"
+        }
+      ]
+    },
+    {
+      "node_id": "node-c",
+      "ssh_alias": "glm53-node-c",
+      "services": [
+        {
+          "id": "c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2",
+          "name": "glm53-spark-prior-rank2",
+          "image": "glm53-dflash2-dgx-spark:prior",
+          "state": "running"
+        }
+      ]
+    },
+    {
+      "node_id": "node-d",
+      "ssh_alias": "glm53-node-d",
+      "services": []
+    }
+  ],
+  "unowned_services": [
+    {
+      "node_id": "node-a",
+      "ssh_alias": "glm53-node-a",
+      "id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "name": "unrelated-inference-service",
+      "image": "unrelated/image:latest",
+      "state": "running",
+      "owner": "unrelated-owner"
+    }
+  ],
+  "replacement_service": {
+    "ssh_alias": "glm53-node-c",
+    "name": "glm53-spark-prior-rank2",
+    "id": "f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3",
+    "image": "glm53-dflash2-dgx-spark:prior",
+    "state": "exited",
+    "owner": "glm53-spark"
+  },
+  "middle_replacement_service": {
+    "ssh_alias": "glm53-node-b",
+    "name": "glm53-spark-prior-rank1-sidecar",
+    "id": "f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4",
+    "image": "glm53-dflash2-dgx-spark:prior",
+    "state": "exited",
+    "owner": "glm53-spark"
+  }
+}

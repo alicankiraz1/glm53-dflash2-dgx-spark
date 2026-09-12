@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "target_model": {
+    "repository": "LibertAIDAI/GLM-5.3-Flash-NVFP4",
+    "revision": "aa28e1f54130286c95fee10d0705c74ce8743734",
+    "shards": 120,
+    "tensor_bytes": 194644803576,
+    "hub_bytes": 194692696910,
+    "manifest_path": "manifests/glm53-target-aa28e1f5.json",
+    "manifest_sha256": "4c5abf786e4402d18980d4d4d70d682cf5b1eab69c163c785a0c2b3779ecca68"
+  },
+  "draft_model": {
+    "repository": "incoai/GLM-5.3-Flash-DFlash2",
+    "revision": "7d74cdd881ed7e32c31175984a67823127b66cfe",
+    "shards": 1,
+    "tensor_bytes": 2342169800,
+    "manifest_path": "manifests/glm53-draft-7d74cdd8.json",
+    "manifest_sha256": "cf967d1b5e44ef06679add189416347782ae334c2afc1d97730de43bb71f6632"
+  },
+  "runtime": {
+    "base_image": "lmsysorg/sglang@sha256:e88340d6cd59e7356147d00de4a318f5951698c9c9dae70ba36fe12d2f034714",
+    "arm64_digest": "sha256:73f9294b78e38d8cc297bfed16daec8ac192b126a2d1fb9055e259a632c68f00",
+    "sglang_commit": "92831e5ec1e109b1be6d7071281557cd6481f4f5",
+    "image_repository": "glm53-dflash2-dgx-spark",
+    "image_owner": "glm53-spark",
+    "containerfile_path": "runtime/Containerfile",
+    "containerfile_sha256": "5c8af452ee1495b19843b2676207373fb450f074d63e22666229f5ee1002fd6d",
+    "patch_series_path": "runtime/patches/series.json",
+    "patch_series_sha256": "7f91ea0f6cf72c5732ed7be7295e1ac8e60e35d072dc54feac51a56e5af3b898",
+    "tilelang_patch_sha256": "9399746b546825af723d4fcad88373e77891a49c0b2c356d37841b381b5b85e3"
+  },
+  "profile": {
+    "profile_name": "dflash-c4-128k-noradix",
+    "served_name": "glm-5.3-flash-nvfp4",
+    "tensor_parallel_size": 4,
+    "nnodes": 4,
+    "pp_size": 1,
+    "context_length": 131072,
+    "max_running_requests": 4,
+    "mem_fraction_static": 0.85,
+    "chunked_prefill_size": 8192,
+    "max_mamba_cache_size": 20,
+    "speculative_algorithm": "DFLASH",
+    "speculative_num_draft_tokens": 8,
+    "dflash_block_size": 8,
+    "draft_attention_backend": "fa4",
+    "prefill_attention_backend": "tilelang",
+    "decode_attention_backend": "tilelang",
+    "kv_cache_dtype": "bfloat16",
+    "moe_runner_backend": "flashinfer_cutlass",
+    "enable_shared_experts_fusion": false,
+    "reasoning_parser": "glm45",
+    "tool_call_parser": "glm47",
+    "sampling_defaults": "model",
+    "radix_cache": false,
+    "dist_timeout_seconds": 3600,
+    "api_port_default": 8002,
+    "dist_port_default": 29600
+  }
+}

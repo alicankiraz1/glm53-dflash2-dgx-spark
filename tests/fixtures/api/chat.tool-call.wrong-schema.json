@@ -1,0 +1,32 @@
+{
+  "id": "chatcmpl-fixture-tool-call-wrong-schema",
+  "object": "chat.completion",
+  "created": 1756000007,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "reasoning_content": "A tool call whose argument object omits the required property.",
+        "tool_calls": [
+          {
+            "id": "call-fixture-1",
+            "type": "function",
+            "function": {
+              "name": "get_shipment_status",
+              "arguments": "{\"shipment\": \"ZX-4471\"}"
+            }
+          }
+        ]
+      },
+      "finish_reason": "tool_calls"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 148,
+    "completion_tokens": 58,
+    "total_tokens": 206
+  }
+}

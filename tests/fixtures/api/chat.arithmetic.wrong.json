@@ -1,0 +1,22 @@
+{
+  "id": "chatcmpl-fixture-arithmetic-wrong",
+  "object": "chat.completion",
+  "created": 1756000003,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "105118",
+        "reasoning_content": "An off-by-one arithmetic slip that must be reported as a correctness failure."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 31,
+    "completion_tokens": 44,
+    "total_tokens": 75
+  }
+}

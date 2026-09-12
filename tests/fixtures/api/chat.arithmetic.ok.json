@@ -1,0 +1,22 @@
+{
+  "id": "chatcmpl-fixture-arithmetic",
+  "object": "chat.completion",
+  "created": 1756000002,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "105117",
+        "reasoning_content": "2841 * 37 = 2841 * 30 + 2841 * 7 = 85230 + 19887 = 105117."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 31,
+    "completion_tokens": 48,
+    "total_tokens": 79
+  }
+}

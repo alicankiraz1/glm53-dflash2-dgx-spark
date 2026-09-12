@@ -1,0 +1,46 @@
+{
+  "concurrency": 1,
+  "model": "glm-5.3-flash-nvfp4",
+  "expected_completion_tokens": 1024,
+  "waves": [
+    {
+      "wave": 0,
+      "requests": [
+        {
+          "name": "c1-w0-r0",
+          "started_seconds": 100.0,
+          "ttft_seconds": 0.25,
+          "completed_seconds": 131.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        }
+      ]
+    },
+    {
+      "wave": 1,
+      "requests": [
+        {
+          "name": "c1-w1-r0",
+          "started_seconds": 140.0,
+          "ttft_seconds": 0.5,
+          "completed_seconds": 172.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        }
+      ]
+    },
+    {
+      "wave": 2,
+      "requests": [
+        {
+          "name": "c1-w2-r0",
+          "started_seconds": 180.0,
+          "ttft_seconds": 0.75,
+          "completed_seconds": 213.0,
+          "prompt_tokens": 64,
+          "completion_tokens": 1024
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "provenance": "historical-source-deployment",
+  "source_report_basename": "2026-08-28-glm53-128k-dflash2-correctness.md",
+  "profile": {
+    "name": "dflash-c4-128k-noradix",
+    "context_length": 131072,
+    "max_running_requests": 4,
+    "speculative_algorithm": "DFLASH",
+    "dflash_block_size": 8,
+    "draft_attention_backend": "fa4",
+    "radix_cache": false
+  },
+  "pinned_inputs": {
+    "target_repository": "LibertAIDAI/GLM-5.3-Flash-NVFP4",
+    "target_revision": "aa28e1f54130286c95fee10d0705c74ce8743734",
+    "draft_repository": "incoai/GLM-5.3-Flash-DFlash2",
+    "draft_revision": "7d74cdd881ed7e32c31175984a67823127b66cfe",
+    "sglang_commit": "92831e5ec1e109b1be6d7071281557cd6481f4f5"
+  },
+  "needle_120k": {
+    "depths": [10, 50, 90],
+    "prompt_tokens": [120164, 120165, 120165],
+    "needle_failures": 0,
+    "artifact": {
+      "basename": "needle-120k-depths.jsonl",
+      "sha256": "c2a3539f11ef3fcb5039406656a9d98934e4805a2eb08b9bd201cf3cbb045fb2"
+    }
+  },
+  "throughput": {
+    "rounds": 3,
+    "output_tokens_per_request": 1024,
+    "temperature": 0.0,
+    "ignore_eos": true,
+    "thinking": "model default",
+    "warmup_output_tokens": 128,
+    "c1_median_decode_tokens_per_second": 33.37,
+    "c1_median_end_to_end_tokens_per_second": 33.11,
+    "c4_median_aggregate_decode_tokens_per_second": 70.43,
+    "c4_median_aggregate_end_to_end_tokens_per_second": 69.97,
+    "c4_median_per_stream_decode_tokens_per_second": 17.79,
+    "failed_requests": 0,
+    "artifact": {
+      "basename": "summary.json",
+      "sha256": "7d3c65f31f7b5b5e561063756970ee3d7e5633ca4376dac40ecb12055db1bbfc"
+    }
+  },
+  "interpretation": {
+    "fresh_package_qualification": false,
+    "hardware_acceptance": false,
+    "speedup_claim": false,
+    "comparison_basis": "historical source-deployment evidence only"
+  }
+}

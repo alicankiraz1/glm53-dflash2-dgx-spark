@@ -1,0 +1,22 @@
+{
+  "id": "chatcmpl-fixture-benchmark",
+  "object": "chat.completion",
+  "created": 1756000011,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Reliable distributed inference depends on bounded queues, explicit timeouts, and evidence preserved for every request.",
+        "reasoning_content": "A steady continuous-essay workload keeps the decode phase saturated."
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 64,
+    "completion_tokens": 1024,
+    "total_tokens": 1088
+  }
+}

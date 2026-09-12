@@ -1,0 +1,9 @@
+# HELP sglang:num_running_reqs The number of running requests.
+# TYPE sglang:num_running_reqs gauge
+sglang:num_running_reqs{model_name="glm-5.3-flash-nvfp4"} 0.0
+# HELP sglang:spec_accept_length The average acceptance length of the last speculative batch.
+# TYPE sglang:spec_accept_length gauge
+sglang:spec_accept_length{model_name="glm-5.3-flash-nvfp4"} 2.3767123287671232
+# HELP sglang:spec_accept_rate The acceptance rate of the last speculative batch.
+# TYPE sglang:spec_accept_rate gauge
+sglang:spec_accept_rate{model_name="glm-5.3-flash-nvfp4"} 0.19667318982387474

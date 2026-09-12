@@ -1,0 +1,22 @@
+{
+  "id": "chatcmpl-fixture-turkish",
+  "object": "chat.completion",
+  "created": 1756000005,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "üç",
+        "reasoning_content": "Turkish requires the dotless and dotted vowels to survive tokenization."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 34,
+    "completion_tokens": 27,
+    "total_tokens": 61
+  }
+}

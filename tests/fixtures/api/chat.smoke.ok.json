@@ -1,0 +1,22 @@
+{
+  "id": "chatcmpl-fixture-smoke",
+  "object": "chat.completion",
+  "created": 1756000001,
+  "model": "glm-5.3-flash-nvfp4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "READY",
+        "reasoning_content": "The operator asked for a single readiness word, so I answer READY."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 24,
+    "completion_tokens": 19,
+    "total_tokens": 43
+  }
+}
