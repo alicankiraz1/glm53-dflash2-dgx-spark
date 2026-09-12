@@ -143,8 +143,13 @@ EOF
 cat >"${FAKE_BIN}/stat" <<'EOF'
 #!/usr/bin/env bash
 set -eu
-if [ "$1" = "-c" ] && [ "$2" = "%d" ]; then
-  /usr/bin/stat -f %d "$3"
+if [ "$#" -eq 3 ] && [ "$1" = "-c" ] && [ "$2" = "%d" ]; then
+  python3 - "$3" <<'PY'
+import os
+import sys
+
+print(os.stat(sys.argv[1]).st_dev)
+PY
   exit 0
 fi
 exec /usr/bin/stat "$@"
