@@ -28,12 +28,28 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python }}
-      - name: Install ShellCheck on Linux
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y shellcheck
-      - name: Install ShellCheck on macOS
-        if: runner.os == 'macOS'
-        run: brew list shellcheck >/dev/null 2>&1 || brew install shellcheck
+      - name: Install verified ShellCheck 0.11.0
+        shell: bash
+        run: |
+          case "${RUNNER_OS}:${RUNNER_ARCH}" in
+            Linux:X64)
+              shellcheck_platform=linux.x86_64
+              shellcheck_digest=b7af85e41cc99489dcc21d66c6d5f3685138f06d34651e6d34b42ec6d54fe6f6 ;;
+            macOS:ARM64)
+              shellcheck_platform=darwin.aarch64
+              shellcheck_digest=339b930feb1ea764467013cc1f72d09cd6b869ebf1013296ba9055ab2ffbd26f ;;
+            macOS:X64)
+              shellcheck_platform=darwin.x86_64
+              shellcheck_digest=c2c15e08df0e8fbc374c335b230a7ee958c313fa5714817a59aa59f1aa594f51 ;;
+            *) printf 'Unsupported ShellCheck platform\n' >&2; exit 1 ;;
+          esac
+          shellcheck_archive="${RUNNER_TEMP}/shellcheck.tar.gz"
+          curl --fail --location --retry 3 --connect-timeout 15 --max-time 120 \
+            "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.${shellcheck_platform}.tar.gz" \
+            --output "${shellcheck_archive}"
+          printf '%s  %s\n' "${shellcheck_digest}" "${shellcheck_archive}" | shasum -a 256 -c -
+          tar -xzf "${shellcheck_archive}" -C "${RUNNER_TEMP}"
+          printf '%s\n' "${RUNNER_TEMP}/shellcheck-v0.11.0" >> "${GITHUB_PATH}"
       - name: Verify software using local fixtures (no GPU)
         shell: bash
         run: /bin/bash scripts/check.sh

@@ -33,7 +33,7 @@ or container archives in documentation or curated reference artifacts.
 
 Run the complete offline check for every change. `scripts/check.sh` runs the
 repository contract, shell syntax checks, ShellCheck, Python tests, and
-documentation/reproduction checks; ShellCheck is a required local dependency
+documentation/reproduction checks; ShellCheck 0.11.0 is the pinned CI version
 for this command.
 
 ```bash
