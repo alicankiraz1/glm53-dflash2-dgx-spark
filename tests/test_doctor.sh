@@ -38,7 +38,8 @@ cleanup() {
 trap cleanup EXIT HUP INT TERM
 
 fake_bin="${temporary_directory}/bin"
-mkdir "${fake_bin}"
+doctor_bin="${temporary_directory}/doctor-bin"
+mkdir "${fake_bin}" "${doctor_bin}"
 known_hosts="${temporary_directory}/known hosts"
 expanded_known_hosts="$(
   python3 -c 'import pathlib, sys; print(pathlib.Path(sys.argv[1]).expanduser())' \
@@ -48,7 +49,13 @@ config="${temporary_directory}/cluster.json"
 ssh_log="${temporary_directory}/ssh.log"
 mutation_log="${temporary_directory}/mutation.log"
 real_python="$(command -v python3)"
-doctor_path="${fake_bin}:/usr/bin:/bin:/usr/sbin:/sbin"
+for doctor_command in bash dirname; do
+  doctor_command_path="$(command -v "${doctor_command}")"
+  [ -n "${doctor_command_path}" ] ||
+    fail "test host lacks required command: ${doctor_command}"
+  ln -s "${doctor_command_path}" "${doctor_bin}/${doctor_command}"
+done
+doctor_path="${fake_bin}:${doctor_bin}"
 : >"${known_hosts}"
 : >"${ssh_log}"
 : >"${mutation_log}"
